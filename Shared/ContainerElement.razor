@@ -1,0 +1,35 @@
+﻿@using ContainerPlanPrediction.Models
+
+@{
+    var colour = GetColour(ContainerData.ContentType);
+    var width = ContainerData.Size == ContainerSize.FortyFoot ? "200px" : "100px";
+}
+
+<div class="col-sm-1" style="height:100px;flex:0 0 @width;max-width:@width;width:@width;background-color:@colour;border:1px solid #333">
+    <div>@ContainerData.ContentType</div>
+</div>
+
+@code {
+    [Parameter]
+    public Container ContainerData { get; set; }
+
+    string GetColour(ContainerContentType contentType)
+    {
+        switch (contentType)
+        {
+            case ContainerContentType.Corrosive:
+                return "orange";
+            case ContainerContentType.Flammable:
+                return "red";
+            case ContainerContentType.Radioactive:
+                return "green";
+            case ContainerContentType.Poison:
+                return "black";
+            case ContainerContentType.Empty:
+                return "#EEE";
+            case ContainerContentType.General:
+            default:
+                return "#CCC";
+        }
+    }
+}

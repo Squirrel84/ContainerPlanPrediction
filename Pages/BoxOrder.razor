@@ -1,0 +1,214 @@
+﻿@page "/boxorder"
+
+@using ContainerPlanPrediction.Data
+@using ContainerPlanPrediction.Models
+@inject ShippingRouteService ShippingService
+@inject DragDropContainerService ContainerDragAndDropService
+<h1>Shipping planner</h1>
+
+@if (shippingRoute == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <button class="btn btn-primary" @onclick="NextScenario">Next >></button>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ContainerType</th>
+                <th>Size</th>
+                <th>ContentType</th>
+                <th>Destination</th>
+                <th>Destination Order</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var containerDestination in shippingRoute.GetAllOnboardContainers())
+            {
+                <tr>
+                    <td>@containerDestination.Container.ContainerType</td>
+                    <td>@containerDestination.Container.Size</td>
+                    <td>@containerDestination.Container.ContentType</td>
+                    <td>@containerDestination.Destination.Name</td>
+                    <td>@containerDestination.Destination.RegionNumber</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="row">
+        @foreach (var containerDestination in shippingRoute.GetAllOnboardContainers())
+        {
+            <Draggable Data="@containerDestination">
+                <div class="draggable">
+                    <ContainerElement ContainerData="containerDestination.Container"></ContainerElement>
+                </div>
+            </Draggable>
+        }
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="1" Bay="1">
+                @{
+
+                    var drop = ContainerDragAndDropService.Drops.FirstOrDefault(x => x.Row == "1" && x.Bay == "1");
+                    if (drop != null)
+                    {
+                        <ContainerElement ContainerData="drop.Data.Container"></ContainerElement>
+                    }
+                    else
+                    {
+                        <div class="drop-target" style="width:100px;height:50px;"></div>
+                    }
+                }
+            </DropTarget>
+        </div>
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="1" Bay="2">
+                @{
+                    var drop = ContainerDragAndDropService.Drops.FirstOrDefault(x => x.Row == "1" && x.Bay == "2");
+                    if (drop != null)
+                    {
+                        <ContainerElement ContainerData="drop.Data.Container"></ContainerElement>
+                    }
+                    else
+                    {
+                        <div class="drop-target" style="width:100px;height:50px;"></div>
+                    }
+                }
+            </DropTarget>
+        </div>
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="1" Bay="3">
+                @{
+                    var drop = ContainerDragAndDropService.Drops.FirstOrDefault(x => x.Row == "1" && x.Bay == "3");
+                    if (drop != null)
+                    {
+                        <ContainerElement ContainerData="drop.Data.Container"></ContainerElement>
+                    }
+                    else
+                    {
+                        <div class="drop-target" style="width:100px;height:50px;"></div>
+                    }
+                }
+            </DropTarget>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="2" Bay="1">
+                @{
+                    var drop = ContainerDragAndDropService.Drops.FirstOrDefault(x => x.Row == "2" && x.Bay == "1");
+                    if (drop != null)
+                    {
+                        <ContainerElement ContainerData="drop.Data.Container"></ContainerElement>
+                    }
+                    else
+                    {
+                        <div class="drop-target" style="width:100px;height:50px;"></div>
+                    }
+                }
+            </DropTarget>
+        </div>
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="2" Bay="2">
+                @{
+                    var drop = ContainerDragAndDropService.Drops.FirstOrDefault(x => x.Row == "2" && x.Bay == "2");
+                    if (drop != null)
+                    {
+                        <ContainerElement ContainerData="drop.Data.Container"></ContainerElement>
+                    }
+                    else
+                    {
+                        <div class="drop-target" style="width:100px;height:50px;"></div>
+                    }
+                }
+            </DropTarget>
+        </div>
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="2" Bay="3">
+                @{
+                    var drop = ContainerDragAndDropService.Drops.FirstOrDefault(x => x.Row == "2" && x.Bay == "3");
+                    if (drop != null)
+                    {
+                        <ContainerElement ContainerData="drop.Data.Container"></ContainerElement>
+                    }
+                    else
+                    {
+                        <div class="drop-target" style="width:100px;height:50px;"></div>
+                    }
+                }
+            </DropTarget>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="3" Bay="1">
+                @{
+                    var drop = ContainerDragAndDropService.Drops.FirstOrDefault(x => x.Row == "3" && x.Bay == "1");
+                    if (drop != null)
+                    {
+                        <ContainerElement ContainerData="drop.Data.Container"></ContainerElement>
+                    }
+                    else
+                    {
+                        <div class="drop-target" style="width:100px;height:50px;"></div>
+                    }
+                }
+            </DropTarget>
+        </div>
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="3" Bay="2">
+                @{
+                    var drop = ContainerDragAndDropService.Drops.FirstOrDefault(x => x.Row == "3" && x.Bay == "2");
+                    if (drop != null)
+                    {
+                        <ContainerElement ContainerData="drop.Data.Container"></ContainerElement>
+                    }
+                    else
+                    {
+                        <div class="drop-target" style="width:100px;height:50px;"></div>
+                    }
+                }
+            </DropTarget>
+        </div>
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="3" Bay="3">
+                @{
+                    var drop = ContainerDragAndDropService.Drops.FirstOrDefault(x => x.Row == "3" && x.Bay == "3");
+                    if (drop != null)
+                    {
+                        <ContainerElement ContainerData="drop.Data.Container"></ContainerElement>
+                    }
+                    else
+                    {
+                        <div class="drop-target" style="width:100px;height:50px;"></div>
+                    }
+                }
+            </DropTarget>
+        </div>
+    </div>
+}
+
+@code {
+    ShippingRoute shippingRoute = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Run(() => { shippingRoute = ShippingService.GetShippingRoute(); });
+    }
+
+    void NextScenario()
+    {
+        shippingRoute = ShippingService.GetShippingRoute();
+    }
+
+    void OnDrop(ContainerDestination data, string row, string bay)
+    {
+        ContainerDragAndDropService.OnDrop(data, row, bay);
+        // Important: Invoke StateHasChanged() to update the page
+        StateHasChanged();
+    }
+}
