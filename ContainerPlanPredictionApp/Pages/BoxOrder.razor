@@ -1,0 +1,142 @@
+﻿@page "/boxorder"
+
+@using ContainerPlanPrediction.Services
+@using ContainerPlanPrediction.Models
+@inject ShippingRouteService ShippingService
+@inject ContainerPlannerService ContainerPlannerService
+<h1>Shipping planner</h1>
+
+@if (shippingRoute == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-sm-4">
+            <button class="btn btn-primary" @onclick="NextScenario">Next >></button>
+        </div>
+        <div class="col-sm-4">
+            <button class="btn btn-success" @onclick="Save">Save</button>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ContainerType</th>
+                <th>Size</th>
+                <th>ContentType</th>
+                <th>Destination</th>
+                <th>Destination Order</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var containerDestination in shippingRoute.GetAllOnboardContainers())
+            {
+                <tr>
+                    <td>@containerDestination.Container.ContainerType</td>
+                    <td>@containerDestination.Container.Size</td>
+                    <td>@containerDestination.Container.ContentType</td>
+                    <td>@containerDestination.Destination.Name</td>
+                    <td>@containerDestination.Destination.RegionNumber</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="row">
+        @foreach (var containerDestination in shippingRoute.GetAllOnboardContainers())
+        {
+            var drop = ContainerPlannerService.Drops.FirstOrDefault(x => x.Data == containerDestination);
+            if (drop == null)
+            {
+                <Draggable Data="@containerDestination">
+                    <ContainerElement ContainerData="containerDestination"></ContainerElement>
+                </Draggable>
+            }
+        }
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="1" Bay="1">
+                <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="1" Bay="1"></ContainerDropElement>
+            </DropTarget>
+        </div>
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="1" Bay="2">
+                <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="1" Bay="2"></ContainerDropElement>
+            </DropTarget>
+        </div>
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="1" Bay="3">
+                <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="1" Bay="3"></ContainerDropElement>
+            </DropTarget>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="2" Bay="1">
+                <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="2" Bay="1"></ContainerDropElement>
+            </DropTarget>
+        </div>
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="2" Bay="2">
+                <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="2" Bay="2"></ContainerDropElement>
+            </DropTarget>
+        </div>
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="2" Bay="3">
+                <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="2" Bay="3"></ContainerDropElement>
+            </DropTarget>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="3" Bay="1">
+                <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="3" Bay="1"></ContainerDropElement>
+            </DropTarget>
+        </div>
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="3" Bay="2">
+                <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="3" Bay="2"></ContainerDropElement>
+            </DropTarget>
+        </div>
+        <div class="col-sm-4" style="border:1px solid #333">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="3" Bay="3">
+                <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="3" Bay="3"></ContainerDropElement>
+            </DropTarget>
+        </div>
+    </div>
+}
+
+@code {
+    ShippingRoute shippingRoute = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Run(() => { shippingRoute = ShippingService.GetShippingRoute(); });
+    }
+
+    void NextScenario()
+    {
+        ContainerPlannerService.Clear();
+        shippingRoute = ShippingService.GetShippingRoute();
+
+        StateHasChanged();
+    }
+
+    void OnDrop(ContainerDestination data, string row, string bay)
+    {
+        ContainerPlannerService.OnDrop(data, row, bay);
+        // Important: Invoke StateHasChanged() to update the page
+        StateHasChanged();
+    }
+
+    void Save()
+    {
+        ContainerPlannerService.Save();
+    }
+}

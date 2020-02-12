@@ -1,0 +1,55 @@
+﻿@using ContainerPlanPrediction.Models
+
+@{
+    var icon = GetIcon(ContainerData.Container.ContainerType);
+    var colour = GetColour(ContainerData.Container.ContentType);
+    var width = ContainerData.Container.Size == ContainerSize.FortyFoot ? "200px" : "100px";
+}
+
+    <div class="col-sm-1" style="height:100px;flex:0 0 @width;max-width:@width;width:@width;background-color:@colour;border:1px solid #333">
+        <div style="float:left;margin-right:1em;">@icon</div>
+        <div style="float:left">
+            @ContainerData.Container.ContentType<br/>
+            [@ContainerData.Destination.RegionNumber] - @ContainerData.Destination.Name
+        </div>
+    </div>
+
+@code {
+    [Parameter]
+    public ContainerDestination ContainerData { get; set; }
+
+    string GetColour(ContainerContentType contentType)
+    {
+        switch (contentType)
+        {
+            case ContainerContentType.Corrosive:
+                return "orange";
+            case ContainerContentType.Flammable:
+                return "red";
+            case ContainerContentType.Radioactive:
+                return "green";
+            case ContainerContentType.Poison:
+                return "black";
+            case ContainerContentType.Empty:
+                return "#EEE";
+            case ContainerContentType.General:
+            default:
+                return "#CCC";
+        }
+    }
+
+    string GetIcon(ContainerType containerType)
+    {
+        switch (containerType)
+        {
+            case ContainerType.OpenTop:
+                return @"\  /";
+            case ContainerType.Refridgerated:
+                return "=D--";
+            case ContainerType.Tank:
+                return "[0==0]";
+            default:
+                return "";
+        }
+    }
+}

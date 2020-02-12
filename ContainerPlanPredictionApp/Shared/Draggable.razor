@@ -1,0 +1,20 @@
+﻿@using ContainerPlanPrediction.Services
+@inject DragAndDropService<T> DragAndDropService
+@typeparam T
+
+<div draggable="true" @ondragstart="@OnDragStart">
+    @ChildContent
+</div>
+@functions {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public T Data { get; set; }
+
+    void OnDragStart()
+    {
+        // Notify the DragAndDropService what the current Data and Zone are.
+        DragAndDropService.StartDrag(Data);
+    }
+}

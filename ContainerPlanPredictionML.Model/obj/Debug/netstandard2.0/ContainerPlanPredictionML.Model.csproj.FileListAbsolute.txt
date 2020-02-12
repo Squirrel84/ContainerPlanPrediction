@@ -1,0 +1,9 @@
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.Model\bin\Debug\netstandard2.0\MLModel.zip
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.Model\bin\Debug\netstandard2.0\ContainerPlanPredictionML.Model.deps.json
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.Model\bin\Debug\netstandard2.0\ContainerPlanPredictionML.Model.dll
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.Model\bin\Debug\netstandard2.0\ContainerPlanPredictionML.Model.pdb
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.Model\obj\Debug\netstandard2.0\ContainerPlanPredictionML.Model.csprojAssemblyReference.cache
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.Model\obj\Debug\netstandard2.0\ContainerPlanPredictionML.Model.AssemblyInfoInputs.cache
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.Model\obj\Debug\netstandard2.0\ContainerPlanPredictionML.Model.AssemblyInfo.cs
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.Model\obj\Debug\netstandard2.0\ContainerPlanPredictionML.Model.dll
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.Model\obj\Debug\netstandard2.0\ContainerPlanPredictionML.Model.pdb

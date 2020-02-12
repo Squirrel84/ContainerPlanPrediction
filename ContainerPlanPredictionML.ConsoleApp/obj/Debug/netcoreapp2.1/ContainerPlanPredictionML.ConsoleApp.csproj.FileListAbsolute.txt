@@ -1,0 +1,14 @@
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.ConsoleApp\bin\Debug\netcoreapp2.1\MLModel.zip
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.ConsoleApp\bin\Debug\netcoreapp2.1\ContainerPlanPredictionML.ConsoleApp.deps.json
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.ConsoleApp\bin\Debug\netcoreapp2.1\ContainerPlanPredictionML.ConsoleApp.runtimeconfig.json
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.ConsoleApp\bin\Debug\netcoreapp2.1\ContainerPlanPredictionML.ConsoleApp.runtimeconfig.dev.json
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.ConsoleApp\bin\Debug\netcoreapp2.1\ContainerPlanPredictionML.ConsoleApp.dll
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.ConsoleApp\bin\Debug\netcoreapp2.1\ContainerPlanPredictionML.ConsoleApp.pdb
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.ConsoleApp\bin\Debug\netcoreapp2.1\ContainerPlanPredictionML.Model.dll
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.ConsoleApp\bin\Debug\netcoreapp2.1\ContainerPlanPredictionML.Model.pdb
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.ConsoleApp\obj\Debug\netcoreapp2.1\ContainerPlanPredictionML.ConsoleApp.csprojAssemblyReference.cache
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.ConsoleApp\obj\Debug\netcoreapp2.1\ContainerPlanPredictionML.ConsoleApp.AssemblyInfoInputs.cache
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.ConsoleApp\obj\Debug\netcoreapp2.1\ContainerPlanPredictionML.ConsoleApp.AssemblyInfo.cs
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.ConsoleApp\obj\Debug\netcoreapp2.1\ContainerPlanPredictionML.ConsoleApp.csproj.CopyComplete
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.ConsoleApp\obj\Debug\netcoreapp2.1\ContainerPlanPredictionML.ConsoleApp.dll
+C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.ConsoleApp\obj\Debug\netcoreapp2.1\ContainerPlanPredictionML.ConsoleApp.pdb

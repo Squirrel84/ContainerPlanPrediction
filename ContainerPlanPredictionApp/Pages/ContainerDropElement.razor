@@ -1,0 +1,26 @@
+﻿@using ContainerPlanPrediction.Models
+@using ContainerPlanPrediction.Services
+@{
+    var drop = Drops.FirstOrDefault(x => x.Row == Row && x.Bay == Bay);
+    if (drop != null)
+    {
+        <Draggable Data="@drop.Data">
+            <ContainerElement ContainerData="drop.Data"></ContainerElement>
+        </Draggable>
+    }
+    else
+    {
+        <div class="drop-target" style="width:100px;height:50px;">@Row - @Bay</div>
+    }
+}
+
+@code {
+    [Parameter]
+    public IEnumerable<Drop<ContainerDestination>> Drops { get; set; }
+
+    [Parameter]
+    public string Row { get; set; }
+
+    [Parameter]
+    public string Bay { get; set; }
+}
