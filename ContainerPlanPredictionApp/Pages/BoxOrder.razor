@@ -4,6 +4,7 @@
 @using ContainerPlanPrediction.Models
 @inject ShippingRouteService ShippingService
 @inject ContainerPlannerService ContainerPlannerService
+@inject ShippingRoutePredictionService ShippingRoutePredictionService
 <h1>Shipping planner</h1>
 
 @if (shippingRoute == null)
@@ -12,14 +13,17 @@
 }
 else
 {
-    <div class="row">
-        <div class="col-sm-4">
-            <button class="btn btn-primary" @onclick="NextScenario">Next >></button>
-        </div>
-        <div class="col-sm-4">
-            <button class="btn btn-success" @onclick="Save">Save</button>
-        </div>
+<div class="row">
+    <div class="col-sm-4">
+        <button class="btn btn-primary" @onclick="NextScenario">Next >></button>
     </div>
+    <div class="col-sm-4">
+        <button class="btn btn-success" @onclick="Save">Save</button>
+    </div>
+    <div class="col-sm-4">
+        <button class="btn btn-success" @onclick="Predict">Predict</button>
+    </div>
+</div>
     <table class="table">
         <thead>
             <tr>
@@ -50,7 +54,7 @@ else
             var drop = ContainerPlannerService.Drops.FirstOrDefault(x => x.Data == containerDestination);
             if (drop == null)
             {
-                <Draggable Data="@containerDestination">
+                <Draggable Data="@containerDestination" Click="@OnClick">
                     <ContainerElement ContainerData="containerDestination"></ContainerElement>
                 </Draggable>
             }
@@ -59,17 +63,17 @@ else
 
     <div class="row">
         <div class="col-sm-4" style="border:1px solid #333">
-            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="1" Bay="1">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="1" Bay="1" Highlight="@(Prediction.Row == "1" && Prediction.Bay == "1")">
                 <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="1" Bay="1"></ContainerDropElement>
             </DropTarget>
         </div>
         <div class="col-sm-4" style="border:1px solid #333">
-            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="1" Bay="2">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="1" Bay="2" Highlight="@(Prediction.Row == "1" && Prediction.Bay == "2")">
                 <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="1" Bay="2"></ContainerDropElement>
             </DropTarget>
         </div>
         <div class="col-sm-4" style="border:1px solid #333">
-            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="1" Bay="3">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="1" Bay="3" Highlight="@(Prediction.Row == "1" && Prediction.Bay == "3")">
                 <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="1" Bay="3"></ContainerDropElement>
             </DropTarget>
         </div>
@@ -77,17 +81,17 @@ else
 
     <div class="row">
         <div class="col-sm-4" style="border:1px solid #333">
-            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="2" Bay="1">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="2" Bay="1" Highlight="@(Prediction.Row == "2" && Prediction.Bay == "1")">
                 <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="2" Bay="1"></ContainerDropElement>
             </DropTarget>
         </div>
         <div class="col-sm-4" style="border:1px solid #333">
-            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="2" Bay="2">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="2" Bay="2" Highlight="@(Prediction.Row == "2" && Prediction.Bay == "2")">
                 <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="2" Bay="2"></ContainerDropElement>
             </DropTarget>
         </div>
         <div class="col-sm-4" style="border:1px solid #333">
-            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="2" Bay="3">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="2" Bay="3" Highlight="@(Prediction.Row == "2" && Prediction.Bay == "3")">
                 <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="2" Bay="3"></ContainerDropElement>
             </DropTarget>
         </div>
@@ -95,17 +99,17 @@ else
 
     <div class="row">
         <div class="col-sm-4" style="border:1px solid #333">
-            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="3" Bay="1">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="3" Bay="1" Highlight="@(Prediction.Row == "3" && Prediction.Bay == "1")">
                 <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="3" Bay="1"></ContainerDropElement>
             </DropTarget>
         </div>
         <div class="col-sm-4" style="border:1px solid #333">
-            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="3" Bay="2">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="3" Bay="2" Highlight="@(Prediction.Row == "3" && Prediction.Bay == "2")">
                 <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="3" Bay="2"></ContainerDropElement>
             </DropTarget>
         </div>
         <div class="col-sm-4" style="border:1px solid #333">
-            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="3" Bay="3">
+            <DropTarget T="ContainerDestination" Drop="@OnDrop" Row="3" Bay="3" Highlight="@(Prediction.Row == "3" && Prediction.Bay == "3")">
                 <ContainerDropElement Drops="ContainerPlannerService.Drops" Row="3" Bay="3"></ContainerDropElement>
             </DropTarget>
         </div>
@@ -114,6 +118,8 @@ else
 
 @code {
     ShippingRoute shippingRoute = null;
+    ContainerDestination SelectedContainerDestination = null;
+    (string Row, string Bay) Prediction;
 
     protected override async Task OnInitializedAsync()
     {
@@ -124,6 +130,7 @@ else
     {
         ContainerPlannerService.Clear();
         shippingRoute = ShippingService.GetShippingRoute();
+        Prediction = ("0", "0");
 
         StateHasChanged();
     }
@@ -131,12 +138,32 @@ else
     void OnDrop(ContainerDestination data, string row, string bay)
     {
         ContainerPlannerService.OnDrop(data, row, bay);
+        Prediction = ("0", "0");
         // Important: Invoke StateHasChanged() to update the page
+        StateHasChanged();
+    }
+
+    void OnClick(ContainerDestination data)
+    {
+        SelectedContainerDestination = data;
+        Prediction = ("0", "0");
+
         StateHasChanged();
     }
 
     void Save()
     {
         ContainerPlannerService.Save();
+        Prediction = ("0", "0");
+
+        StateHasChanged();
+    }
+
+    void Predict()
+    {
+        var rowPrediction = ShippingRoutePredictionService.PredictRow(SelectedContainerDestination);
+        var bayPrediction = ShippingRoutePredictionService.PredictBay(SelectedContainerDestination, int.Parse(rowPrediction));
+
+        Prediction = (rowPrediction, bayPrediction);
     }
 }

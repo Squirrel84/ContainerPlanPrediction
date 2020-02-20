@@ -1,7 +1,7 @@
 ﻿@using ContainerPlanPrediction.Services
 @inject DragAndDropService<T> DragAndDropService
 @typeparam T
-<div ondragover="event.preventDefault()" @ondrop="@OnDrop">
+<div ondragover="event.preventDefault()" @ondrop="@OnDrop" class="alert @boxClass">
     @ChildContent
 </div>
 @functions {
@@ -17,6 +17,11 @@
     [Parameter]
     public Action<T, string, string> Drop { get; set; }
 
+    [Parameter]
+    public bool Highlight { get; set; }
+
+    string boxClass = "";
+
     void OnDrop()
     {
         if (Drop != null)
@@ -26,5 +31,10 @@
                 Drop((T)DragAndDropService.Data, Row, Bay);
             }
         }
+    }
+
+    protected override void OnParametersSet()
+    {
+        boxClass = Highlight ? "alert-info" : "";
     }
 }

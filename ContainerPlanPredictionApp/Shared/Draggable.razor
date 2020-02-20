@@ -2,7 +2,7 @@
 @inject DragAndDropService<T> DragAndDropService
 @typeparam T
 
-<div draggable="true" @ondragstart="@OnDragStart">
+<div draggable="true" @ondragstart="@OnDragStart" @onclick="@DraggableClicked">
     @ChildContent
 </div>
 @functions {
@@ -11,6 +11,14 @@
 
     [Parameter]
     public T Data { get; set; }
+
+    [Parameter]
+    public Action<T> Click { get; set; }
+
+    void DraggableClicked()
+    {
+        Click(Data);
+    }
 
     void OnDragStart()
     {
