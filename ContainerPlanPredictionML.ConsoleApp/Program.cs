@@ -11,24 +11,38 @@ namespace ContainerPlanPredictionML.ConsoleApp
     class Program
     {
         //Dataset to use for predictions 
-        private const string DATA_FILEPATH = @"C:\Users\lukes\AppData\Local\Temp\8e851cdd-559d-4c46-b6ad-84f83823a7a8.tsv";
+        private const string DATA_FILENAME = @"8e851cdd-559d-4c46-b6ad-84f83823a7a8.tsv";
 
         static void Main(string[] args)
         {
+            string currentDirectory = System.Environment.CurrentDirectory;
+            string solutionDirectory = currentDirectory.Substring(0, currentDirectory.IndexOf("ContainerPlanPrediction")) + "ContainerPlanPrediction";
+            var dataDirectory = solutionDirectory + "\\ContainerPlanPredictionApp\\";
+            var modelDirectory = solutionDirectory + "\\ContainerPlanPredictionML.Model\\";
+
+            var dataFilePath = Path.Combine(dataDirectory, DATA_FILENAME);
+
+            ModelBuilder.CreateModel(dataFilePath, modelDirectory, ModelBuilder.MODEL_KEY_ROW);
+            ModelBuilder.CreateModel(dataFilePath, modelDirectory, ModelBuilder.MODEL_KEY_BAY);
+
             // Create single instance of sample data from first line of dataset for model input
-            ModelInput sampleData = CreateSingleDataSample(DATA_FILEPATH);
+            ModelInput sampleData = CreateSingleDataSample(dataFilePath);
+
+            ConsumeModel.Initialise(@"C:\Projects\ContainerPlanPrediction\ContainerPlanPredictionML.Model\");
 
             // Make a single prediction on the sample data and print results
-            ModelOutput predictionResult = ConsumeModel.Predict(sampleData);
+            ModelOutput rowPredictionResult = ConsumeModel.CurrentModel.PredictRow(sampleData);
+
+            ModelOutput bayPredictionResult = ConsumeModel.CurrentModel.PredictBay(sampleData);
 
             Console.WriteLine("Using model to make single prediction -- Comparing actual Row with predicted Row from sample data...\n\n");
             Console.WriteLine($"Scenario: {sampleData.Scenario}");
-            Console.WriteLine($"Bay: {sampleData.Bay}");
             Console.WriteLine($"RouteNumber: {sampleData.RouteNumber}");
             Console.WriteLine($"ContainerType: {sampleData.ContainerType}");
             Console.WriteLine($"ContainerSize: {sampleData.ContainerSize}");
             Console.WriteLine($"ContainerContentType: {sampleData.ContainerContentType}");
-            Console.WriteLine($"\n\nActual Row: {sampleData.Row} \nPredicted Row value {predictionResult.Prediction} \nPredicted Row scores: [{String.Join(",", predictionResult.Score)}]\n\n");
+            Console.WriteLine($"\n\nActual Row: {sampleData.Row} \nPredicted Row value {rowPredictionResult.Prediction} \nPredicted Row scores: [{String.Join(",", rowPredictionResult.Score)}]\n\n");
+            Console.WriteLine($"\n\nActual Bay: {sampleData.Bay} \nPredicted Bay value {bayPredictionResult.Prediction} \nPredicted Bay scores: [{String.Join(",", bayPredictionResult.Score)}]\n\n");
             Console.WriteLine("=============== End of process, hit any key to finish ===============");
             Console.ReadKey();
         }
@@ -51,9 +65,7 @@ namespace ContainerPlanPredictionML.ConsoleApp
 
             // Use first line of dataset as model input
             // You can replace this with new test data (hardcoded or from end-user application)
-            ModelInput sampleForPrediction = mlContext.Data.CreateEnumerable<ModelInput>(dataView, false)
-                                                                        .First();
-            return sampleForPrediction;
+            return mlContext.Data.CreateEnumerable<ModelInput>(dataView, false).First();
         }
         #endregion
     }

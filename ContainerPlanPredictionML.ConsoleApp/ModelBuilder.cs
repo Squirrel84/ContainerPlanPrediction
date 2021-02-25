@@ -16,19 +16,12 @@ namespace ContainerPlanPredictionML.ConsoleApp
         public const string MODEL_KEY_BAY = "Bay";
         public const string MODEL_KEY_ROW = "Row";
 
-        private const string MODEL_PATH = @"../../../../ContainerPlanPredictionML.Model";
-        //private static string MODEL_FILEPATH = @"../../../../ContainerPlanPredictionML.Model/MLModel.zip";
-
         // Create MLContext to be shared across the model creation workflow objects 
         // Set a random seed for repeatable/deterministic results across multiple trainings.
         private static MLContext mlContext = new MLContext(seed: 1);
 
-        public static void CreateModel()
+        public static string CreateModel(string trainDataFilePath, string modelDirectory, string key)
         {
-            string key = MODEL_KEY_ROW;
-            string trainDataFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".tsv");
-            string modelPath = MODEL_PATH;
-
             // Load Data
             IDataView trainingDataView = mlContext.Data.LoadFromTextFile<ModelInput>(
                                             path: trainDataFilePath,
@@ -50,13 +43,17 @@ namespace ContainerPlanPredictionML.ConsoleApp
             }
 
             // Evaluate quality of Model
-            Evaluate(mlContext, trainingDataView, trainingPipeline);
+            Evaluate(mlContext, trainingDataView, trainingPipeline, key);
 
             // Train Model
             ITransformer mlModel = TrainModel(mlContext, trainingDataView, trainingPipeline);
 
+            string modelFilePath = $"{modelDirectory}{key}MLModel.zip";
+
             // Save model
-            SaveModel(mlContext, mlModel, $"{modelPath}/{key}MLModel.zip", trainingDataView.Schema);
+            SaveModel(mlContext, mlModel, modelFilePath, trainingDataView.Schema);
+
+            return modelFilePath;
         }
 
         public static IEstimator<ITransformer> BuildTrainingPipeline_Row(MLContext mlContext)
@@ -79,12 +76,12 @@ namespace ContainerPlanPredictionML.ConsoleApp
         {
             // Data process configuration with pipeline data transformations 
             var dataProcessPipeline = mlContext.Transforms.Conversion.MapValueToKey("Bay", "Bay")
-                                      .Append(mlContext.Transforms.Categorical.OneHotEncoding(new[] { new InputOutputColumnPair("ContainerType", "ContainerType"), new InputOutputColumnPair("ContainerSize", "ContainerSize"), new InputOutputColumnPair("ContainerContentType", "ContainerContentType") }))
-                                      .Append(mlContext.Transforms.Concatenate("Features", new[] { "ContainerType", "ContainerSize", "ContainerContentType", "RouteNumber" }))
+                                      .Append(mlContext.Transforms.Categorical.OneHotEncoding(new[] { new InputOutputColumnPair("Row", "Row"), new InputOutputColumnPair("ContainerType", "ContainerType"), new InputOutputColumnPair("ContainerSize", "ContainerSize"), new InputOutputColumnPair("ContainerContentType", "ContainerContentType") }))
+                                      .Append(mlContext.Transforms.Concatenate("Features", new[] { "Row", "ContainerType", "ContainerSize", "ContainerContentType", "RouteNumber" }))
                                       .AppendCacheCheckpoint(mlContext);
 
             // Set the training algorithm 
-            var trainer = mlContext.MulticlassClassification.Trainers.OneVersusAll(mlContext.BinaryClassification.Trainers.FastTree(new FastTreeBinaryTrainer.Options() { NumberOfLeaves = 21, MinimumExampleCountPerLeaf = 1, NumberOfTrees = 20, LearningRate = 0.1960758f, Shrinkage = 0.5834716f, LabelColumnName = "Row", FeatureColumnName = "Features" }), labelColumnName: "Row")
+            var trainer = mlContext.MulticlassClassification.Trainers.OneVersusAll(mlContext.BinaryClassification.Trainers.FastTree(new FastTreeBinaryTrainer.Options() { NumberOfLeaves = 21, MinimumExampleCountPerLeaf = 1, NumberOfTrees = 20, LearningRate = 0.1960758f, Shrinkage = 0.5834716f, LabelColumnName = "Bay", FeatureColumnName = "Features" }), labelColumnName: "Bay")
                                       .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel", "PredictedLabel"));
             var trainingPipeline = dataProcessPipeline.Append(trainer);
 
@@ -101,31 +98,21 @@ namespace ContainerPlanPredictionML.ConsoleApp
             return model;
         }
 
-        private static void Evaluate(MLContext mlContext, IDataView trainingDataView, IEstimator<ITransformer> trainingPipeline)
+        private static void Evaluate(MLContext mlContext, IDataView trainingDataView, IEstimator<ITransformer> trainingPipeline, string key)
         {
             // Cross-Validate with single dataset (since we don't have two datasets, one for training and for evaluate)
             // in order to evaluate and get the model's accuracy metrics
             Console.WriteLine("=============== Cross-validating to get model's accuracy metrics ===============");
-            var crossValidationResults = mlContext.MulticlassClassification.CrossValidate(trainingDataView, trainingPipeline, numberOfFolds: 5, labelColumnName: "Row");
+            var crossValidationResults = mlContext.MulticlassClassification.CrossValidate(trainingDataView, trainingPipeline, numberOfFolds: 5, labelColumnName: key);
             PrintMulticlassClassificationFoldsAverageMetrics(crossValidationResults);
         }
 
-        private static void SaveModel(MLContext mlContext, ITransformer mlModel, string modelRelativePath, DataViewSchema modelInputSchema)
+        private static void SaveModel(MLContext mlContext, ITransformer mlModel, string modelPath, DataViewSchema modelInputSchema)
         {
             // Save/persist the trained model to a .ZIP file
             Console.WriteLine($"=============== Saving the model  ===============");
-            mlContext.Model.Save(mlModel, modelInputSchema, GetAbsolutePath(modelRelativePath));
-            Console.WriteLine("The model is saved to {0}", GetAbsolutePath(modelRelativePath));
-        }
-
-        public static string GetAbsolutePath(string relativePath)
-        {
-            FileInfo _dataRoot = new FileInfo(typeof(Program).Assembly.Location);
-            string assemblyFolderPath = _dataRoot.Directory.FullName;
-
-            string fullPath = Path.Combine(assemblyFolderPath, relativePath);
-
-            return fullPath;
+            mlContext.Model.Save(mlModel, modelInputSchema, modelPath);
+            Console.WriteLine("The model is saved to {0}", modelPath);
         }
 
         public static void PrintMulticlassClassificationMetrics(MulticlassClassificationMetrics metrics)
