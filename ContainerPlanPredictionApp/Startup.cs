@@ -1,24 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ContainerPlanPrediction.Data;
+using ContainerPlanPrediction.Models;
+using ContainerPlanPrediction.Services;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ContainerPlanPrediction.Data;
-using ContainerPlanPrediction.Models;
-using Microsoft.ML;
-using Microsoft.ML.Data;
-using ContainerPlanPrediction.Services;
-using Microsoft.EntityFrameworkCore;
 
 namespace ContainerPlanPrediction
 {
     public class Startup
     {
+        private static readonly InMemoryDatabaseRoot InMemoryDatabaseRoot = new InMemoryDatabaseRoot();
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -51,7 +47,10 @@ namespace ContainerPlanPrediction
             services.AddScoped<IContainerPositionRepository, ContainerPositionRepository>();
 
             services.AddDbContext<ShipPlanningContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("CarSupplierContext")));
+            {
+                options.UseInMemoryDatabase("ShipPlanning", InMemoryDatabaseRoot);
+                //options.UseSqlServer(Configuration.GetConnectionString("CarSupplierContext"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

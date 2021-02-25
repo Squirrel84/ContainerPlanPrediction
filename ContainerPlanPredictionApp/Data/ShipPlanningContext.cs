@@ -11,13 +11,14 @@ namespace ContainerPlanPrediction.Data
 
         public ShipPlanningContext(DbContextOptions<ShipPlanningContext> options) : base(options)
         {
+            //options.UseInMemoryDatabase(databaseName: GetType().Name);
             this.Database.EnsureCreated();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    base.OnConfiguring(optionsBuilder);
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

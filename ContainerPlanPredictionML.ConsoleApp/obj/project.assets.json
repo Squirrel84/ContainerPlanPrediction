@@ -1772,7 +1772,7 @@
       ]
     },
     "System.Collections.NonGeneric/4.3.0": {
-      "sha512": "prtjIEMhGUnQq6RnPEYLpFt8AtLbp9yq2zxOSrY7KJJZrw25Fi97IzBqY7iqssbM61Ek5b8f3MG/sG1N2sN5KA==",
+      "sha512": "LE/oChpRvkSi3U25u0KnJcI44JeDZ1QJCyN4qFDx2uusEypdqR24w7lKYw21eYe5esuCBuc862wRmpF63Yy1KQ==",
       "type": "package",
       "path": "system.collections.nongeneric/4.3.0",
       "files": [
@@ -1906,7 +1906,7 @@
       ]
     },
     "System.ComponentModel.Primitives/4.3.0": {
-      "sha512": "KMVuoQ+8bMQ/Z59M3s64num5AD74X5YSqVc7ibwGkPTfmmkl2W8VuSxLRJtpw4KzQrSKUgR0BLbF0adPfcTSGQ==",
+      "sha512": "j8GUkCpM8V4d4vhLIIoBLGey2Z5bCkMVNjEZseyAlm4n5arcsJOeI3zkUP+zvZgzsbLTYh4lYeP/ZD/gdIAPrw==",
       "type": "package",
       "path": "system.componentmodel.primitives/4.3.0",
       "files": [
@@ -3988,23 +3988,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\lukes\\.nuget\\packages\\": {},
+    "C:\\Users\\luke.spires\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Projects\\ContainerPlanPrediction\\ContainerPlanPredictionML.ConsoleApp\\ContainerPlanPredictionML.ConsoleApp.csproj",
+      "projectUniqueName": "C:\\Projects\\Playground\\ContainerPlanPrediction\\ContainerPlanPredictionML.ConsoleApp\\ContainerPlanPredictionML.ConsoleApp.csproj",
       "projectName": "ContainerPlanPredictionML.ConsoleApp",
-      "projectPath": "C:\\Projects\\ContainerPlanPrediction\\ContainerPlanPredictionML.ConsoleApp\\ContainerPlanPredictionML.ConsoleApp.csproj",
-      "packagesPath": "C:\\Users\\lukes\\.nuget\\packages\\",
-      "outputPath": "C:\\Projects\\ContainerPlanPrediction\\ContainerPlanPredictionML.ConsoleApp\\obj\\",
+      "projectPath": "C:\\Projects\\Playground\\ContainerPlanPrediction\\ContainerPlanPredictionML.ConsoleApp\\ContainerPlanPredictionML.ConsoleApp.csproj",
+      "packagesPath": "C:\\Users\\luke.spires\\.nuget\\packages\\",
+      "outputPath": "C:\\Projects\\Playground\\ContainerPlanPrediction\\ContainerPlanPredictionML.ConsoleApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\lukes\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\luke.spires\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4012,13 +4012,15 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "http://nexus.fesrv01.de.ad.tba.nl/repository/nuget-hosted/": {},
+        "http://win12build:8624/nuget/TLE-NugetFeed/": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "C:\\Projects\\ContainerPlanPrediction\\ContainerPlanPredictionML.Model\\ContainerPlanPredictionML.Model.csproj": {
-              "projectPath": "C:\\Projects\\ContainerPlanPrediction\\ContainerPlanPredictionML.Model\\ContainerPlanPredictionML.Model.csproj"
+            "C:\\Projects\\Playground\\ContainerPlanPrediction\\ContainerPlanPredictionML.Model\\ContainerPlanPredictionML.Model.csproj": {
+              "projectPath": "C:\\Projects\\Playground\\ContainerPlanPrediction\\ContainerPlanPredictionML.Model\\ContainerPlanPredictionML.Model.csproj"
             }
           }
         }
@@ -4057,7 +4059,7 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
       }
     }
   }
